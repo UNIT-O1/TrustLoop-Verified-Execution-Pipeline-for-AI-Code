@@ -15,8 +15,9 @@ Traditional "Generate → Run" workflows are dangerous for critical logic becaus
 - **Silent Failures:** AI code often works for common cases but breaks on "unlikely" edge cases  
 - **Implicit Assumptions:** Code may assume a sorted list or positive integers without checking  
 - **No Mathematical Grounding:** Unit tests only prove the code works for the inputs you thought of  
+
 Link:- https://www.youtube.com/watch?v=N6PWATvLQCY
-This video demonstrates the Ariane 5 Flight 501 disaster and highlights the real-world impact of unverified software logic
+The 1996 Ariane 5 Flight 501 crash was caused by unchecked assumptions in software logic. In an AI-driven coding future, such failures become more dangerous.
 ---
 
 ## 💡 The Trustloop Pipeline
