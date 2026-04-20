@@ -1,409 +1,119 @@
-# TrustLoop-Verified-Execution-Pipeline-for-AI-Code
+# 🔬 Verified AI Code Generation (VACG)
 
-### *From AI Output to Provable Correctness*
+> **Don’t trust AI-generated code — verify it.**
 
-> **AI can generate code. This system proves whether it deserves to be trusted.**
+AI can generate code that looks correct but fails silently on edge cases, violates assumptions (like unsorted inputs), or lacks any formal correctness guarantees. In critical systems, this isn't just a bug—it’s a liability.
 
-## 🚨 The Core Problem
-
-AI-generated code is accelerating development—but it introduces a critical risk:
-
-> ❗ **There is no inherent guarantee that AI-generated code is correct.**
-
-Even when it “looks right,” it can fail due to:
-
-* Hidden logical errors
-* Edge-case failures
-* Invalid assumptions
-* Unsafe operations
-
-In safety-critical systems (aerospace, finance, infrastructure), this is unacceptable.
+The 1996 Ariane 5 Flight 501 failure—although ultimately a human design and verification error—happened because logic wasn’t properly validated, not because the code couldn’t be written. In a near future where AI will dominate code generation, this exact class of failure becomes even more dangerous. This project turns AI code generation from a guess into a proof.
 
 ---
 
-## 💡 What This Project Actually Solves
+## 🚨 The Problem
 
-This project does **one thing extremely well**:
+Traditional "Generate → Run" workflows are dangerous for critical logic because:
 
-> ✅ **It verifies the correctness of AI-generated code with strong guarantees.**
-
-It does **NOT** attempt to:
-
-* Train LLMs
-* Improve code generation quality
-* Replace existing AI models
-
-Instead, it focuses on the missing layer:
-
-> 🧠 **Trust**
+- **Silent Failures:** AI code often works for common cases but breaks on "unlikely" edge cases  
+- **Implicit Assumptions:** Code may assume a sorted list or positive integers without checking  
+- **No Mathematical Grounding:** Unit tests only prove the code works for the inputs you thought of  
 
 ---
 
-## ⚠️ Important Scope Clarification (Read This First)
+## 💡 The VACG Pipeline
 
-### 🚧 No Live LLM in the Pipeline
+We shift the paradigm from **Generate → Run** to:
+Generate ➔ Specify ➔ Verify ➔ Execute
 
-This system **does NOT generate code at runtime using an LLM**.
 
-> ❗ All code used in the pipeline is **pre-generated and stored**.
-
----
-
-### 🎯 Why This Is a Strength (Not a Limitation)
-
-This is a **deliberate research decision**, not a missing feature.
-
-#### 1️⃣ Pure Focus on Verification
-
-We isolate the real problem:
-
-> “Can we *prove* code correctness?”
-
-Not:
-
-> “Can we generate code?”
-
-This ensures:
-
-* Zero noise from LLM randomness
-* Full focus on correctness guarantees
+Code must pass multiple layers of correctness checks before it is ever accepted for execution.
 
 ---
 
-#### 2️⃣ Deterministic & Reproducible Results
+## 1. Specification Layer (The Contract)
 
-Unlike live AI systems:
+Each algorithm is paired with a **Formal Specification**:
 
-* No API variability
-* No version drift
-* No stochastic outputs
-
-> Same input → same verification result (always)
-
-This makes the system:
-
-* Research-grade
-* Benchmarkable
-* Scientifically valid
+- **Preconditions:** What must be true before execution (e.g., `arr` is sorted)  
+- **Postconditions:** What must be guaranteed after execution (e.g., `result` is correct)  
+- **Invariants:** What must remain true during execution  
 
 ---
 
-#### 3️⃣ Stronger Validation of the Verification Engine
+## ⚙️ Three Layers of Defense
 
-The pipeline works on:
+### 🔹 Layer A: Runtime Assertions (Design by Contract)
 
-* Arbitrary pre-generated code
-* Including intentionally buggy implementations
-
-Which proves:
-
-> ✔️ Verification is **independent of the generator**
+- Enforces preconditions before execution  
+- Validates postconditions after execution  
+- Stops execution immediately on violation  
 
 ---
 
-### 🔄 Future Direction (Planned, Not Implemented)
+### 🔹 Layer B: Property-Based Testing (Hypothesis)
 
-The architecture is designed to plug into:
-
-* OpenAI
-* Anthropic
-* Google DeepMind
-
-Future pipeline:
-
-```text
-LLM → Code + Spec → Verification → Feedback → Regeneration
-```
+- Define **properties**, not test cases  
+- Automatically generates hundreds of random inputs  
+- Finds edge cases and unexpected failures  
 
 ---
 
-## 🏗️ System Architecture
+### 🔹 Layer C: Formal Verification with Z3 (The Proof)
 
-```text
-Pre-Generated Code + Formal Spec
-                ↓
-      Verification Pipeline
-                ↓
-    PASS / FAIL + Diagnostics
-                ↓
-        Streamlit UI
-```
+This is the core of the system.
+
+| Approach | What it does | Reliability |
+|----------|-------------|------------|
+| Unit Testing | Tests specific inputs | 🔴 Low |
+| Property Testing | Tests many inputs | 🟡 Medium |
+| Z3 Solver | Proves for all inputs | 🟢 Absolute |
 
 ---
 
-## 🔍 The Three-Layer Verification Pipeline
+### 🧠 How Z3 Works (Intuition)
 
-This system does not rely on a single method.
-It uses **three independent correctness guarantees**.
+You don’t give Z3 values — you give it logic.
 
----
+- Instead of: *“If x = 5, does it work?”*  
+- Z3 asks: *“Is there ANY value of x that breaks this?”*
 
-### 1️⃣ Runtime Assertions — *Design by Contract*
-
-**What it does:**
-
-* Enforces preconditions and postconditions during execution
-
-**Example:**
-
-* Binary Search requires sorted input
-* Output must be valid index or -1
-
-**Why it matters:**
-
-* Prevents invalid execution states
-* Catches violations immediately
-
-> 🔒 Ensures the program behaves correctly for a given run
+If a counterexample exists → bug found  
+If none exists → property is mathematically proven (within the model)
 
 ---
 
-### 2️⃣ Property-Based Testing — *Hypothesis*
+## 🔍 Verification Examples
 
-**What it does:**
+### 🚀 Safe Integer Conversion (Ariane 5 Case Study)
 
-* Tests universal properties across hundreds of random inputs
-
-**Example property:**
-
-```python
-forall arr: sort(arr) == sorted(arr)
-```
-
-**Why it matters:**
-
-* Discovers edge cases humans miss:
-
-  * Empty arrays
-  * Duplicates
-  * Negative values
-
-> 🧪 Demonstrates robustness across input space
+- Constraint: `x ∈ [-32768, 32767]`  
+- Z3 checks if any value violates this  
+- Prevents overflow failures before execution  
 
 ---
 
-### 3️⃣ Formal Verification — *Z3 SMT Solver*
+### 🔎 Binary Search & Sorting
 
-**What it does:**
-
-* Uses symbolic logic to prove correctness mathematically
-
-**Capabilities:**
-
-* Validates invariants
-* Detects logical inconsistencies
-* Proves correctness for *all possible inputs*
-
-**Example:**
-
-* Euclidean GCD correctness
-* Loop invariant preservation
-
-> 🧠 This is the strongest guarantee: **proof, not evidence**
+- **Sorting:** Ensures output is ordered and no elements are lost  
+- **Binary Search:** Guarantees valid indexing and correct convergence  
 
 ---
 
-## 📦 Module-Level Breakdown
+### 🔢 Prime Check (Bug Demo)
+
+A deliberately flawed implementation is included.
+
+- Incorrect bound (`n/3`)  
+- Z3 finds counterexample (e.g., `n = 9`)  
+- Demonstrates real bug detection via formal reasoning  
 
 ---
 
-### 🔹 `app.py` — Orchestrator
+## 🚀 Run the Project
 
-* Central execution engine
-* Dynamically loads code using `exec()`
-* Runs:
-
-  * Assertions
-  * Property tests
-  * Formal proofs
-* Outputs final verdict:
-
-  * ✅ VERIFIED
-  * ❌ FAILED
-
-Tracks:
-
-* Execution time
-* Failure counts
-* Pass/fail per layer
-
----
-
-### 🔹 `generator/code_gen.py`
-
-* Registry-based architecture (`@register`)
-* Stores pre-generated implementations
-
-Includes:
-
-* Binary Search
-* Sorting Algorithms
-* GCD
-* Factorial
-* Safety-critical modules
-
----
-
-### 🔹 `generator/spec_gen.py`
-
-Defines formal specifications:
-
-```python
-FormalSpec = {
-  "pre": condition_before_execution,
-  "post": expected_outcome,
-  "invariant": loop_property,
-  "complexity": time_complexity
-}
-```
-
-> 🔑 Separation of code and specification enables independent verification
-
----
-
-### 🔹 `verifier/assertions.py`
-
-* Implements **Hoare Logic**
-* Validates:
-
-  * Preconditions
-  * Postconditions
-
-Returns structured results with failure reasons
-
----
-
-### 🔹 `verifier/tests.py`
-
-* Uses Hypothesis
-* Generates randomized test inputs
-* Outputs:
-
-  * Pass rate
-  * Counterexamples
-
----
-
-### 🔹 `verifier/formal.py`
-
-* Integrates Z3 Solver
-* Converts logic into symbolic constraints
-* Proves:
-
-  * Invariants
-  * Mathematical correctness
-
----
-
-## 🧪 Algorithms Included (and Why)
-
----
-
-### 🔍 Binary Search
-
-* Demonstrates strict preconditions
-* Validates loop invariants
-
----
-
-### 🔢 Sorting Algorithms
-
-* Ideal for property-based testing
-* Strong invariant reasoning
-
----
-
-### 🔁 GCD (Euclidean Algorithm)
-
-* Recursive correctness proof
-* Mathematical validation
-
----
-
-### 🔣 Factorial
-
-* Base case + recursion correctness
-* Inductive reasoning validation
-
----
-
-### 🛡️ Safety-Critical Logic
-
-Inspired by the **Ariane 5 Flight 501 failure**
-
-Problem:
-
-* Unsafe float → integer conversion caused overflow
-
-Solution:
-
-* Formally verify bounds:
-
-  * Output ∈ [-32768, 32767]
-
-> Demonstrates real-world impact of formal verification
-
----
-
-## 📊 Why This Approach Matters
-
-### Without Verification
-
-* Code may appear correct
-* Bugs remain hidden
-* No guarantees
-
----
-
-### With This System
-
-* Multi-layer validation
-* Mathematical guarantees
-* Deterministic results
-
----
-
-## 🚀 Getting Started
+1. Clone the repository  
+2. Install dependencies:
 
 ```bash
-git clone https://github.com/your-repo/verified_ai_codegen
-cd verified_ai_codegen
 pip install -r requirements.txt
-streamlit run app.py
-```
 
----
-
-## 📁 Project Structure
-
-```text
-verified_ai_codegen/
-├── app.py
-├── generator/
-│   ├── code_gen.py
-│   └── spec_gen.py
-├── verifier/
-│   ├── assertions.py
-│   ├── tests.py
-│   └── formal.py
-├── requirements.txt
-└── README.md
-```
-
----
-
-## 🔮 Future Work
-
-* Live LLM integration
-* Self-correcting agent loop
-* CI/CD verification pipelines
-* Large-scale formal proofs
-
----
-
-## 🧠 Final Statement
-
-> This project does not try to make AI generate better code.
->
-> It ensures that **any generated code—good or bad—can be rigorously verified.**
-
+https://www.youtube.com/watch?v=N6PWATvLQCY
+This video demonstrates the Ariane 5 Flight 501 disaster and highlights the real-world impact of unverified software logic
