@@ -1,0 +1,72 @@
+{
+  "algorithm": "Linear Search",
+  "description": "Sequential scan — works on any list regardless of ordering.",
+  "complexity": {
+    "time_best": "O(1)",
+    "time_average": "O(n)",
+    "time_worst": "O(n)",
+    "space": "O(1)"
+  },
+  "examples": [
+    {
+      "label": "Target present — unsorted array",
+      "arr": [64, 34, 25, 12, 22, 11, 90],
+      "target": 12,
+      "expected": 3,
+      "notes": "Unsorted input: binary search would fail here. Linear search finds 12 at index 3."
+    },
+    {
+      "label": "Target at index 0 (best case)",
+      "arr": [7, 3, 1, 9, 5],
+      "target": 7,
+      "expected": 0,
+      "notes": "Best case: target is the first element, O(1) comparisons."
+    },
+    {
+      "label": "Target at last position (worst case)",
+      "arr": [3, 6, 9, 12, 15],
+      "target": 15,
+      "expected": 4,
+      "notes": "Worst case: target is last, requiring n comparisons."
+    },
+    {
+      "label": "Target absent",
+      "arr": [10, 20, 30, 40, 50],
+      "target": 35,
+      "expected": -1,
+      "notes": "Target not present: all n elements scanned before returning -1."
+    },
+    {
+      "label": "Duplicates — first occurrence returned",
+      "arr": [3, 1, 4, 1, 5, 9, 2, 6],
+      "target": 1,
+      "expected": 1,
+      "notes": "1 appears at indices 1 and 3. Linear search guarantees the FIRST index."
+    },
+    {
+      "label": "Empty array",
+      "arr": [],
+      "target": 42,
+      "expected": -1,
+      "notes": "Loop never executes; -1 returned immediately."
+    },
+    {
+      "label": "Single element — found",
+      "arr": [99],
+      "target": 99,
+      "expected": 0,
+      "notes": "One comparison; target found at index 0."
+    },
+    {
+      "label": "Negative numbers",
+      "arr": [-5, -3, 0, 3, 5],
+      "target": -3,
+      "expected": 1,
+      "notes": "Negative values are handled correctly by equality comparison."
+    }
+  ],
+  "precondition": "arr is any finite list; no ordering required.",
+  "postcondition": "Returns first index i with arr[i]==target, or -1 if absent.",
+  "invariant": "After k iterations, target has not been found in arr[0..k-1].",
+  "reference": "Knuth, D.E. (1998). The Art of Computer Programming, Vol. 3, §6.1"
+}
