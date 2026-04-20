@@ -1,4 +1,4 @@
-# 🔬 Verified AI Code Generation (VACG)
+# TrustLoop: Verified Execution Pipeline for AI Code
 
 > **Don’t trust AI-generated code — verify it.**
 
@@ -19,7 +19,7 @@ Link:- https://www.youtube.com/watch?v=N6PWATvLQCY
 This video demonstrates the Ariane 5 Flight 501 disaster and highlights the real-world impact of unverified software logic
 ---
 
-## 💡 The VACG Pipeline
+## 💡 The Trustloop Pipeline
 
 We shift the paradigm from **Generate → Run** to:
 Generate ➔ Specify ➔ Verify ➔ Execute
