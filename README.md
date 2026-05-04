@@ -8,8 +8,12 @@
 
 <p align="center">
   <a href="https://www.youtube.com/watch?v=g_K8Xy2Qtu8">
-    <img src="https://i.ytimg.com/vi/g_K8Xy2Qtu8/maxresdefault.jpg" alt="TrustLoop Demo Video"/>
+    <img src="https://i.ytimg.com/vi/g_K8Xy2Qtu8/maxresdefault.jpg" 
+         alt="TrustLoop Demo Video" 
+         width="600"/>
   </a>
+  <br/>
+  <b>▶️ Click to watch demo video</b>
 </p>
 
 <p align="center">
@@ -231,5 +235,4 @@ B.Tech Mathematics & Computing, NIT Warangal
 <p align="center">
   <b>TrustLoop transforms AI code from “probably correct” → provably correct.</b>
 </p>
-```
 
