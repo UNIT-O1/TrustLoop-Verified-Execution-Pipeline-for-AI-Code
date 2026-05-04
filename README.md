@@ -7,6 +7,12 @@
 </p>
 
 <p align="center">
+  <a href="https://www.youtube.com/watch?v=g_K8Xy2Qtu8">
+    <img src="https://i.ytimg.com/vi/g_K8Xy2Qtu8/maxresdefault.jpg" alt="TrustLoop Demo Video"/>
+  </a>
+</p>
+
+<p align="center">
   <img src="https://img.shields.io/badge/Python-Core-blue?style=for-the-badge&logo=python"/>
   <img src="https://img.shields.io/badge/Z3-Formal%20Verification-black?style=for-the-badge"/>
   <img src="https://img.shields.io/badge/Hypothesis-Property%20Testing-orange?style=for-the-badge"/>
@@ -225,4 +231,5 @@ B.Tech Mathematics & Computing, NIT Warangal
 <p align="center">
   <b>TrustLoop transforms AI code from “probably correct” → provably correct.</b>
 </p>
+```
 
